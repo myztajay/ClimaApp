@@ -15,6 +15,8 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var searchTextField: UITextField!
     
+    let weatherManager = WeatherManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -33,11 +35,15 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         searchTextField.endEditing(true)
         return true
     }
-    // a check of wether or
+    // a check of wether or not they have text
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         return searchTextField.text != ""
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
+        // this assignment will assure there is a value so that later there will be no need to unwrap.
+        if let city = searchTextField.text {
+            weatherManager.fetchWeather(cityName: city)
+        }
         searchTextField.text = ""
     }
 }
