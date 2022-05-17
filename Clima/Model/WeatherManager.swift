@@ -20,23 +20,21 @@ struct WeatherManager {
         if let url = URL(string: urlString) {
             // setting up session
             let session = URLSession(configuration: .default)
-            // api requestion with promise handler
-            let task = session.dataTask(with: url, completionHandler: handle(data: response: error:))
+            // api requestion with handler
+            let task = session.dataTask(with: url) {data, response, error in
+                //error checking
+                if error != nil {
+                    print(error)
+                    return
+                }
+                // printing response if we have one
+                if let safeData = data {
+                    let dataString = String(data: safeData, encoding: .utf8)
+                    print(dataString)
+                }
+            }
             // all tasks start suspended
             task.resume()
         }
-    }
-    func handle(data: Data?, response: URLResponse?, error: Error?) -> Void{
-        //error checking
-        if error != nil {
-            print(error)
-            return
-        }
-        // printing response if we have one
-        if let safeData = data {
-            let dataString = String(data: safeData, encoding: .utf8)
-            print(dataString)
-        }
-        
     }
 }
