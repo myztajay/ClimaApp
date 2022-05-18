@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManagerDelegate {
+class WeatherViewController: UIViewController {
 
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -24,7 +24,10 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManag
         searchTextField.delegate = self
         weatherManager.delegate = self
     }
-    
+}
+
+// Breaking apart UI text field functionality
+extension WeatherViewController: UITextFieldDelegate {
     @IBAction func searchButtonPressed(_ sender: UIButton) {
         var input = searchTextField.text
         searchTextField.endEditing(true)
@@ -47,7 +50,10 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManag
         }
         searchTextField.text = ""
     }
-    
+}
+
+// weather manager functionality
+extension WeatherViewController: WeatherManagerDelegate {
     func didWeatherUpdate(_ weatherManager: WeatherManager,_ weather: WeatherModel){
         print("\(weather.temperature) from the controller")
         DispatchQueue.main.async{
@@ -59,7 +65,4 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManag
     func didFailWithError(_ error: Error) {
         print(error)
     }
-    
-
 }
-
