@@ -8,20 +8,21 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate {
+class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManagerDelegate {
 
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var searchTextField: UITextField!
     
-    let weatherManager = WeatherManager()
+    var weatherManager = WeatherManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         // Allows delegate functionality in this controller
         searchTextField.delegate = self
+        weatherManager.delegate = self
     }
     
     @IBAction func searchButtonPressed(_ sender: UIButton) {
@@ -46,5 +47,19 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         }
         searchTextField.text = ""
     }
+    
+    func didWeatherUpdate(_ weatherManager: WeatherManager,_ weather: WeatherModel){
+        print("\(weather.temperature) from the controller")
+        DispatchQueue.main.async{
+            self.temperatureLabel.text = weather.temperatureString
+            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+            self.cityLabel.text = weather.cityName
+        }
+    }
+    func didFailWithError(_ error: Error) {
+        print(error)
+    }
+    
+
 }
 

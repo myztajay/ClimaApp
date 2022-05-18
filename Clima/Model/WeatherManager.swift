@@ -8,15 +8,21 @@
 
 import Foundation
 
+protocol WeatherManagerDelegate {
+    func didWeatherUpdate (_ weatherManager: WeatherManager,_ weather: WeatherModel)
+    func didFailWithError (_ error: Error)
+}
+
 struct WeatherManager {
     let baseURL = "https://api.openweathermap.org/data/2.5/weather?appid=44ea42967b627e5d041106235be0242a"
+    var delegate: WeatherManagerDelegate?
     
     func fetchWeather(cityName: String){
         var urlString = "\(baseURL)&q=\(cityName)"
-        performRequest(urlString: urlString)
+        performRequest(with: urlString)
         print(cityName)
     }
-    func performRequest(urlString: String){
+    func performRequest(with urlString: String){
         if let url = URL(string: urlString) {
             // setting up session
             let session = URLSession(configuration: .default)
@@ -24,12 +30,15 @@ struct WeatherManager {
             let task = session.dataTask(with: url) {data, response, error in
                 //error checking
                 if error != nil {
-                    print(error)
+                    self.delegate?.didFailWithError(error!)
                     return
                 }
                 // printing response if we have one
                 if let safeData = data {
-                    parseJSON(weatherData: safeData)
+                    if let weather = parseJSON(safeData){
+                        // triggering parent / delgate method here
+                        self.delegate?.didWeatherUpdate(self, weather)
+                    }
                 }
             }
             // all tasks start suspended
@@ -37,7 +46,7 @@ struct WeatherManager {
         }
     }
     
-    func parseJSON (weatherData: Data){
+    func parseJSON (_ weatherData: Data) -> WeatherModel?{
         // choose decoder
         let decoder = JSONDecoder()
         // do try blocks and error handling
@@ -50,11 +59,12 @@ struct WeatherManager {
             let name = decodedData.name
             // instantiate weather model
             let weatherModel = WeatherModel(conditionId: id, cityName: name, temperature: temp)
-            print(weatherModel.conditionName)
+            return weatherModel
         } catch {
             print(error)
+            self.delegate?.didFailWithError(error)
+            return nil
         }
-        
     }
     
 }

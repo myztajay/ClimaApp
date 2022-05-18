@@ -14,25 +14,9 @@
             filePath = "Clima/Model/WeatherManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "16"
-            endingLineNumber = "16"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "fetchWeather(cityName:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1A5AE5BC-FD6B-4D9E-AA74-13AD909B5FB7"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Clima/Model/WeatherManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
-            landmarkName = "parseJSON(weatherData:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
